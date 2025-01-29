@@ -14,7 +14,7 @@ import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.recipe.*;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -33,8 +33,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -124,17 +124,17 @@ public class Carrier implements ModInitializer, EntityComponentInitializer {
                     ((CarrierPlayerExtension) player).setCanCarry(canCarry));
         });
 
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, b, env) ->
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
                 commandDispatcher.register(CommandManager.literal("carrierinfo")
                         .executes((ctx) -> {
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
                             NbtCompound tag = new NbtCompound();
                             HOLDER.get(player).writeToNbt(tag);
-                            ctx.getSource().sendFeedback(Text.literal(tag.toString()), false);
+                            ctx.getSource().sendFeedback(new LiteralText(tag.toString()), false);
                             return 1;
                         })));
 
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, b, env) ->
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
                 commandDispatcher.register(CommandManager.literal("carrierdelete")
                         .executes((ctx) -> {
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
@@ -142,11 +142,11 @@ public class Carrier implements ModInitializer, EntityComponentInitializer {
                             NbtCompound tag = new NbtCompound();
                             component.writeToNbt(tag);
                             component.setCarryingData(null);
-                            ctx.getSource().sendFeedback(Text.literal("Deleted ").append(Text.literal(tag.toString()).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tag.toString())))), false);
+                            ctx.getSource().sendFeedback(new LiteralText("Deleted ").append(new LiteralText(tag.toString()).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tag.toString())))), false);
                             return 1;
                         })));
 
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, b, env) ->
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
                 commandDispatcher.register(CommandManager.literal("carrierplace")
                         .executes((ctx) -> {
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
@@ -155,7 +155,7 @@ public class Carrier implements ModInitializer, EntityComponentInitializer {
                             BlockPos pos = player.getBlockPos().offset(player.getHorizontalFacing());
                             ServerWorld world = ctx.getSource().getWorld();
                             if (!world.getBlockState(pos).getMaterial().isReplaceable()) {
-                                ctx.getSource().sendFeedback(Text.literal("Could not place! Make sure you have empty space in front of you."), false);
+                                ctx.getSource().sendFeedback(new LiteralText("Could not place! Make sure you have empty space in front of you."), false);
                                 return 1;
                             }
                             CarriablePlacementContext placementCtx = new CarriablePlacementContext(component, carriable, pos, player.getHorizontalFacing().getOpposite(), player.getHorizontalFacing());
@@ -173,7 +173,8 @@ public class Carrier implements ModInitializer, EntityComponentInitializer {
     public static boolean canCarry(Identifier id) {
         if (Registry.BLOCK.getOrEmpty(id).map((b) -> b.getRegistryEntry().isIn(BLACKLIST)).orElse(false)) return false;
 
-        if (CONFIG.getType() == Config.ListType.WHITELIST) return CONFIG.getList().stream().anyMatch((s) -> Pattern.compile(s).matcher(id.toString()).find());
+        if (CONFIG.getType() == Config.ListType.WHITELIST)
+            return CONFIG.getList().stream().anyMatch((s) -> Pattern.compile(s).matcher(id.toString()).find());
         else return CONFIG.getList().stream().noneMatch((s) -> Pattern.compile(s).matcher(id.toString()).find());
     }
 

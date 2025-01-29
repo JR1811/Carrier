@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'fabric-loom' version '1.9-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -13,15 +13,21 @@ group = project.maven_group
 repositories {
     maven {
         name = 'Ladysnake Mods'
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        url = 'https://maven.ladysnake.org/releases'
     }
     maven {
+        url = uri("https://ueaj.dev/maven")
+    }
+    /*maven {
+        url = uri("https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/")
+    }*/
+    /*maven {
         name = "ARRP"
         url = uri("https://storage.googleapis.com/devan-maven/")
         content {
             includeGroup "net.devtech"
         }
-    }
+    }*/
 }
 
 dependencies {
@@ -33,12 +39,15 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components}"
+
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components}"
-    modImplementation "net.devtech:arrp:0.5.5"
-    include "net.devtech:arrp:0.5.5"
+
+    modImplementation "net.devtech:arrp:${project.arrp_version}"
+    include "net.devtech:arrp:${project.arrp_version}"
 }
 
 processResources {

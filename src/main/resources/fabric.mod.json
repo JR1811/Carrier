@@ -6,7 +6,8 @@
   "name": "Carrier",
   "description": "Carrier enables you to easily transport chests, animals and mob spawners!",
   "authors": [
-    "GabrielOlvH"
+    "GabrielOlvH - Dev",
+    "ShiroJR1811 - Dev (Port to 1.18.2)"
   ],
   "contact": {
     "sources": "https://github.com/GabrielOlvH/Carrier",
@@ -40,6 +41,6 @@
   "depends": {
     "fabricloader": ">=0.10.0",
     "fabric": "*",
-    "minecraft": "1.19.x"
+    "minecraft": ">=1.18.2"
   }
 }
