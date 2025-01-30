@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityRenderer.class)
 public class MixinPlayerRenderer {
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render*", at = @At("TAIL"))
     private void carrier_renderCarrying(AbstractClientPlayerEntity player, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int light, CallbackInfo ci) {
         CarrierComponent carrier = Carrier.HOLDER.get(player);
         CarryingData carrying = carrier.getCarryingData();

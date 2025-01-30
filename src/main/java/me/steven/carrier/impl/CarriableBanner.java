@@ -21,11 +21,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.NotNull;
 
+// Field annotations have been changed to exist in both the client and server jar.
+// This should help out to launch this mod on the server side too.
 public class CarriableBanner extends CarriableGeneric {
 
-    @Environment(EnvType.CLIENT)
+    // @Environment(EnvType.CLIENT)
     private static BannerBlockEntity dummyEnchantingTable = null;
-    @Environment(EnvType.CLIENT)
+    // @Environment(EnvType.CLIENT)
     private static BannerBlockEntityRenderer dummyRenderer = null;
 
     public CarriableBanner(Identifier type, Block parent) {

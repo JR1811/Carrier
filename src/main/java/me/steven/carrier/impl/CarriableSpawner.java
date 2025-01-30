@@ -20,11 +20,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.NotNull;
 
+// Field annotations have been changed to exist in both the client and server jar.
+// This should help out to launch this mod on the server side too.
 public class CarriableSpawner extends CarriableGeneric {
 
-    @Environment(EnvType.CLIENT)
+    // @Environment(EnvType.CLIENT)
     private static MobSpawnerBlockEntity dummySpawner = null;
-    @Environment(EnvType.CLIENT)
+    // @Environment(EnvType.CLIENT)
     private static MobSpawnerBlockEntityRenderer dummyRenderer = null;
 
     public CarriableSpawner(Identifier type) {

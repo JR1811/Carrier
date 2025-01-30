@@ -83,6 +83,10 @@ public class Carrier implements ModInitializer, EntityComponentInitializer {
         }
 
         ServerTickEvents.END_WORLD_TICK.register(new ServerWorldTickCallback());
+
+        // Those registered instances are called both on the client side and server side here.
+        // They contain fields, which only used to exist on the client side due to the annotations, which may have
+        // prevented launching this mod on the server side (multiplayer).
         CarriableRegistry.INSTANCE.register(new Identifier(MOD_ID, "minecraft_cow"), new CarriableCow());
         CarriableRegistry.INSTANCE.register(new Identifier(MOD_ID, "minecraft_chicken"), new CarriableChicken());
         CarriableRegistry.INSTANCE.register(new Identifier(MOD_ID, "minecraft_parrot"), new CarriableParrot());
